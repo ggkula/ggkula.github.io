@@ -18,7 +18,7 @@ module.exports = [[module.i, "dl,ol,p,pre,ul{margin-top:0}address,dl,ol,p,pre,ul
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = [[module.i, "/* You can add global styles to this file, and also import other style files */\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9zdW5zaGFuZ3poaS9jb2RlL2JsSGVscGVyL3NyYy9zdHlsZXMuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSw4RUFBQSIsImZpbGUiOiJzcmMvc3R5bGVzLnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIvKiBZb3UgY2FuIGFkZCBnbG9iYWwgc3R5bGVzIHRvIHRoaXMgZmlsZSwgYW5kIGFsc28gaW1wb3J0IG90aGVyIHN0eWxlIGZpbGVzICovXG4iXX0= */", '', '']]
+module.exports = [[module.i, "/* You can add global styles to this file, and also import other style files */\nhtml, body, h1, h2, h3, h4, h5, h6, p {\n  margin: 0;\n  padding: 0; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9HOlxcY29kZVxcYmxIZWxwZXIvc3JjXFxzdHlsZXMuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSw4RUFBQTtBQUVBO0VBQ0UsU0FBUztFQUNULFVBQVUsRUFBQSIsImZpbGUiOiJzcmMvc3R5bGVzLnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIvKiBZb3UgY2FuIGFkZCBnbG9iYWwgc3R5bGVzIHRvIHRoaXMgZmlsZSwgYW5kIGFsc28gaW1wb3J0IG90aGVyIHN0eWxlIGZpbGVzICovXHJcblxyXG5odG1sLGJvZHksaDEsaDIsaDMsaDQsaDUsaDYscHtcclxuICBtYXJnaW46IDA7XHJcbiAgcGFkZGluZzogMDtcclxufSJdfQ== */", '', '']]
 
 /***/ }),
 
@@ -598,8 +598,8 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/sunshangzhi/code/blHelper/node_modules/ng-zorro-antd/ng-zorro-antd.min.css */"./node_modules/ng-zorro-antd/ng-zorro-antd.min.css");
-module.exports = __webpack_require__(/*! /Users/sunshangzhi/code/blHelper/src/styles.scss */"./src/styles.scss");
+__webpack_require__(/*! G:\code\blHelper\node_modules\ng-zorro-antd\ng-zorro-antd.min.css */"./node_modules/ng-zorro-antd/ng-zorro-antd.min.css");
+module.exports = __webpack_require__(/*! G:\code\blHelper\src\styles.scss */"./src/styles.scss");
 
 
 /***/ })
