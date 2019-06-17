@@ -143,6 +143,16 @@ var AppComponent = /** @class */ (function () {
         this.title = 'blHelper';
         window.innerWidth > 500 ? this.basicService.browser.next(true) : this.basicService.browser.next(false);
     }
+    AppComponent.prototype.onResize = function (event) {
+        event.target.innerWidth > 480 ? this.basicService.browser.next(true) : this.basicService.browser.next(false);
+        // console.log(event.target.innerWidth)
+    };
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["HostListener"])('window:resize', ['$event']),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Function),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [Object]),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:returntype", void 0)
+    ], AppComponent.prototype, "onResize", null);
     AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-root',
@@ -374,7 +384,7 @@ var HeaderComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"box\">\n  <h4>\n    {{rank.title}}\n    <button nz-button appDlPic nzType=\"primary\" nzSize=\"small\" [name]=\"rank.title\" [path]=\"rank.download\">下载本月节奏榜</button>\n  </h4>\n  <div class=\"ranking\">\n    <div class=\"score\">\n      <div class=\"line\" *ngFor=\"let item of rank.rank\">\n        <div class=\"item\">\n          {{item.score}}\n        </div>\n      </div>\n    </div>\n    <div class=\"avatarList\">\n      <div class=\"line\" *ngFor=\"let item of rank.rank\">\n        <div *ngIf=\"item.type === 'score'\">\n          <div class=\"item dark\" *ngFor=\"let card of item.sorts\" nz-popover [nzContent]=\"'奥里西斯'\" (click)=\"selectItem(1)\">\n            <img class=\"avatar\" src=\"/assets/avatar/dark/奥.png\" alt=\"奥里西斯\">\n          </div>\n        </div>\n        <div *ngIf=\"item.type === 'describe'\">\n          {{item.describe}}\n        </div>\n      </div>\n    </div>\n  </div>\n</div>"
+module.exports = "<div class=\"box\">\n  <h4>\n    {{rank.title}}\n<!--    <button nz-button appDlPic nzType=\"primary\" nzSize=\"small\" [name]=\"rank.title\" [path]=\"rank.download\">下载本月节奏榜</button>-->\n  </h4>\n  <div class=\"ranking\">\n    <div class=\"score\">\n      <div class=\"line\" *ngFor=\"let item of rank.rank\">\n        <div class=\"item\">\n          {{item.score}}\n        </div>\n      </div>\n    </div>\n    <div class=\"avatarList\">\n      <div class=\"line\" *ngFor=\"let item of rank.rank\">\n        <div *ngIf=\"item.type === 'score'\">\n          <div class=\"item dark\" *ngFor=\"let card of item.detail\" nz-popover [nzContent]=\"card.name\" (click)=\"selectItem(card.id)\">\n            <img class=\"avatar\" [src]=\"card.avatar\" [alt]=\"card.name\">\n          </div>\n        </div>\n        <div *ngIf=\"item.type === 'describe'\">\n          {{item.describe}}\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<nz-modal nzTitle=\"卡牌详情\"\n          [(nzVisible)]=\"openModal\"\n          [nzFooter]=\"null\" [nzStyle]=\"{ top: '40px' }\"\n          [nzBodyStyle]=\"{height: '80vh',overflow: 'scroll'}\"\n          (nzOnCancel)=\"closeModalFunc()\">\n  <app-resolve class=\"right\" [selectedId]='selectedId'></app-resolve>\n</nz-modal>"
 
 /***/ }),
 
@@ -402,24 +412,47 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _data_rankList_rank__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../data/rankList/rank */ "./src/data/rankList/rank.ts");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _data_data__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../data/data */ "./src/data/data.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _server_basic_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../server/basic.service */ "./src/app/server/basic.service.ts");
+
+
 
 
 
 
 var RankingComponent = /** @class */ (function () {
-    function RankingComponent(route) {
+    function RankingComponent(route, basicService) {
         this.route = route;
+        this.basicService = basicService;
         this.rankList = _data_rankList_rank__WEBPACK_IMPORTED_MODULE_2__["default"];
+        this.dataList = _data_data__WEBPACK_IMPORTED_MODULE_3__["default"];
+        this.openModal = false;
         this.emitId = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
-        this.rankId = parseInt(this.route.snapshot.paramMap.get('id'));
-        this.rank = this.rankList[this.rankId];
-        console.log(this.rank);
     }
     RankingComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.rankId = parseInt(this.route.snapshot.paramMap.get('id'));
+        this.rank = this.rankList[this.rankId];
+        this.rank.rank.forEach((function (value, index) {
+            if (value.type === 'score' && value.detail.length === 0) {
+                value.sorts.forEach(function (v) {
+                    value.detail.push(_this.dataList[v]);
+                });
+            }
+        }));
     };
     RankingComponent.prototype.selectItem = function (id) {
-        this.emitId.emit(id);
+        if (this.basicService.browser.getValue()) {
+            this.emitId.emit(id);
+        }
+        else {
+            this.selectedId = id;
+            this.openModal = true;
+        }
+    };
+    RankingComponent.prototype.closeModalFunc = function () {
+        this.openModal = false;
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(),
@@ -431,7 +464,8 @@ var RankingComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./ranking.component.html */ "./src/app/component/ranking/ranking.component.html"),
             styles: [__webpack_require__(/*! ./ranking.component.scss */ "./src/app/component/ranking/ranking.component.scss")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_3__["ActivatedRoute"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"],
+            _server_basic_service__WEBPACK_IMPORTED_MODULE_5__["BasicService"]])
     ], RankingComponent);
     return RankingComponent;
 }());
@@ -447,7 +481,7 @@ var RankingComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div>\n  <nz-tabset *ngIf=\"selectedId\" [nzTabPosition]=\"'top'\" [nzType]=\"'card'\">\n    <nz-tab nzTitle=\"单卡评测\">\n      <nz-tabset>\n        <nz-tab *ngFor=\"let item of selectedCard.resolves\" [nzTitle]=\"'作者：' + item.auth\">\n          <div class=\"resolve\">\n            评测日期：{{item.date}}\n            <br>\n            <br>\n            <p *ngFor=\"let para of item.paragraph\" class=\"para\">{{para}}</p>\n          </div>\n        </nz-tab>\n      </nz-tabset>\n    </nz-tab>\n    <nz-tab nzTitle=\"查看技能\">\n      <div class=\"skill\">\n        <img [src]=\"selectedCard.skill\" [alt]=\"selectedCard.name + '技能'\" class=\"img\">\n      </div>\n    </nz-tab>\n    <nz-tab nzTitle=\"极限面板\">\n      <nz-tabset>\n        <nz-tab *ngFor=\"let card of selectedCard.card\" [nzTitle]=\"card.type\">\n          <div class=\"card\">\n            <img [src]=\"card.src\" [alt]=\"selectedCard.name + '面板'\" class=\"img\">\n          </div>\n        </nz-tab>\n      </nz-tabset>\n    </nz-tab>\n  </nz-tabset>\n  <div *ngIf=\"!selectedId\">\n    请选择卡牌\n  </div>\n</div>\n"
+module.exports = "<div>\n  <nz-tabset *ngIf=\"selectedId + 1 > 0\" [nzTabPosition]=\"'top'\" [nzType]=\"'card'\">\n    <nz-tab nzTitle=\"单卡评测\">\n      <nz-tabset>\n        <nz-tab *ngFor=\"let item of selectedCard.resolves\" [nzTitle]=\"'作者：' + item.auth\">\n          <div class=\"resolve\">\n            评测日期：{{item.date}}\n            <br>\n            <br>\n            <p *ngFor=\"let para of item.paragraph\" class=\"para\">{{para}}</p>\n          </div>\n        </nz-tab>\n      </nz-tabset>\n    </nz-tab>\n    <nz-tab nzTitle=\"查看技能\">\n      <div class=\"skill\">\n        <img [src]=\"selectedCard.skill\" [alt]=\"selectedCard.name + '技能'\" class=\"img\">\n      </div>\n    </nz-tab>\n    <nz-tab nzTitle=\"极限面板\">\n      <nz-tabset>\n        <nz-tab *ngFor=\"let card of selectedCard.card\" [nzTitle]=\"card.type\">\n          <div class=\"card\">\n            <img [src]=\"card.src\" [alt]=\"selectedCard.name + '面板'\" class=\"img\">\n          </div>\n        </nz-tab>\n      </nz-tabset>\n    </nz-tab>\n  </nz-tabset>\n  <div *ngIf=\"!(selectedId + 1)\">\n    请选择卡牌\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -485,10 +519,9 @@ var ResolveComponent = /** @class */ (function () {
     ResolveComponent.prototype.ngOnInit = function () {
     };
     ResolveComponent.prototype.ngOnChanges = function (value) {
-        if (value.selectedId.currentValue) {
-            this.selectedCard = this.data.filter(function (v) {
-                return v.id === value.selectedId.currentValue;
-            })[0];
+        console.log(value.selectedId.currentValue);
+        if (value.selectedId.currentValue + 1 > 0) {
+            this.selectedCard = this.data[value.selectedId.currentValue];
         }
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -721,7 +754,7 @@ var IndexComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"box\">\n  <app-ranking class=\"left\" (emitId)=\"getSelectedId($event)\"></app-ranking>\n  <app-resolve class=\"right\" [selectedId]='selectedId'></app-resolve>\n</div>\n<div class=\"smallBox\"></div>"
+module.exports = "<div class=\"box\" *ngIf=\"windowSize\">\n  <app-ranking class=\"left\" (emitId)=\"getSelectedId($event)\"></app-ranking>\n  <app-resolve class=\"right\" [selectedId]='selectedId'></app-resolve>\n</div>\n<div class=\"smallBox\" *ngIf=\"!windowSize\">\n  <app-ranking class=\"rank\" (emitId)=\"getSelectedId($event)\"></app-ranking>\n</div>"
 
 /***/ }),
 
@@ -732,7 +765,7 @@ module.exports = "<div class=\"box\">\n  <app-ranking class=\"left\" (emitId)=\"
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "@media screen and (min-width: 481px) {\n  .box {\n    padding: 20px 5vw;\n    width: 100%;\n    height: 100%; }\n    .box .left {\n      display: inline-block;\n      width: 48%;\n      height: 100%;\n      vertical-align: top;\n      margin-right: 4%; }\n    .box .right {\n      border: 1px solid #e3e3e3;\n      padding: 10px;\n      display: inline-block;\n      width: 48%;\n      height: 100%;\n      vertical-align: top; }\n  .smallBox {\n    display: none; } }\n\n@media screen and (max-width: 480px) {\n  .box {\n    display: none; }\n  .smallBox {\n    padding: 10px 5px;\n    width: 100%;\n    height: 100%; } }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnZS9saXN0LWRldGFpbC9HOlxcY29kZVxcYmxIZWxwZXIvc3JjXFxhcHBcXHBhZ2VcXGxpc3QtZGV0YWlsXFxsaXN0LWRldGFpbC5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFO0lBQ0UsaUJBQWlCO0lBQ2pCLFdBQVc7SUFDWCxZQUFZLEVBQUE7SUFIZDtNQUtJLHFCQUFxQjtNQUNyQixVQUFVO01BQ1YsWUFBWTtNQUNaLG1CQUFtQjtNQUNuQixnQkFBZ0IsRUFBQTtJQVRwQjtNQVlJLHlCQUF5QjtNQUN6QixhQUFhO01BQ2IscUJBQXFCO01BQ3JCLFVBQVU7TUFDVixZQUFZO01BQ1osbUJBQW1CLEVBQUE7RUFHdkI7SUFDRSxhQUFhLEVBQUEsRUFDZDs7QUFFSDtFQUNFO0lBQ0UsYUFBYSxFQUFBO0VBRWY7SUFDRSxpQkFBaUI7SUFDakIsV0FBVztJQUNYLFlBQVksRUFBQSxFQUNiIiwiZmlsZSI6InNyYy9hcHAvcGFnZS9saXN0LWRldGFpbC9saXN0LWRldGFpbC5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIkBtZWRpYSBzY3JlZW4gYW5kIChtaW4td2lkdGg6NDgxcHgpIHtcclxuICAuYm94IHtcclxuICAgIHBhZGRpbmc6IDIwcHggNXZ3O1xyXG4gICAgd2lkdGg6IDEwMCU7XHJcbiAgICBoZWlnaHQ6IDEwMCU7XHJcbiAgICAubGVmdCB7XHJcbiAgICAgIGRpc3BsYXk6IGlubGluZS1ibG9jaztcclxuICAgICAgd2lkdGg6IDQ4JTtcclxuICAgICAgaGVpZ2h0OiAxMDAlO1xyXG4gICAgICB2ZXJ0aWNhbC1hbGlnbjogdG9wO1xyXG4gICAgICBtYXJnaW4tcmlnaHQ6IDQlO1xyXG4gICAgfVxyXG4gICAgLnJpZ2h0IHtcclxuICAgICAgYm9yZGVyOiAxcHggc29saWQgI2UzZTNlMztcclxuICAgICAgcGFkZGluZzogMTBweDtcclxuICAgICAgZGlzcGxheTogaW5saW5lLWJsb2NrO1xyXG4gICAgICB3aWR0aDogNDglO1xyXG4gICAgICBoZWlnaHQ6IDEwMCU7XHJcbiAgICAgIHZlcnRpY2FsLWFsaWduOiB0b3A7XHJcbiAgICB9XHJcbiAgfVxyXG4gIC5zbWFsbEJveHtcclxuICAgIGRpc3BsYXk6IG5vbmU7XHJcbiAgfVxyXG59XHJcbkBtZWRpYSBzY3JlZW4gYW5kIChtYXgtd2lkdGg6NDgwcHgpIHtcclxuICAuYm94e1xyXG4gICAgZGlzcGxheTogbm9uZTtcclxuICB9XHJcbiAgLnNtYWxsQm94e1xyXG4gICAgcGFkZGluZzogMTBweCA1cHg7XHJcbiAgICB3aWR0aDogMTAwJTtcclxuICAgIGhlaWdodDogMTAwJTtcclxuICB9XHJcbn0iXX0= */"
+module.exports = ".box {\n  padding: 20px 5vw;\n  width: 100%;\n  height: 100%; }\n  .box .left {\n    display: inline-block;\n    width: 48%;\n    height: 100%;\n    vertical-align: top;\n    margin-right: 4%; }\n  .box .right {\n    border: 1px solid #e3e3e3;\n    padding: 10px;\n    display: inline-block;\n    width: 48%;\n    height: 100%;\n    vertical-align: top; }\n  .smallBox {\n  padding: 10px 5px;\n  width: 100%;\n  height: 100%; }\n  .smallBox .rank {\n    width: 95%; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnZS9saXN0LWRldGFpbC9HOlxcY29kZVxcYmxIZWxwZXIvc3JjXFxhcHBcXHBhZ2VcXGxpc3QtZGV0YWlsXFxsaXN0LWRldGFpbC5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLGlCQUFpQjtFQUNqQixXQUFXO0VBQ1gsWUFBWSxFQUFBO0VBSGQ7SUFNSSxxQkFBcUI7SUFDckIsVUFBVTtJQUNWLFlBQVk7SUFDWixtQkFBbUI7SUFDbkIsZ0JBQWdCLEVBQUE7RUFWcEI7SUFjSSx5QkFBeUI7SUFDekIsYUFBYTtJQUNiLHFCQUFxQjtJQUNyQixVQUFVO0lBQ1YsWUFBWTtJQUNaLG1CQUFtQixFQUFBO0VBSXZCO0VBQ0UsaUJBQWlCO0VBQ2pCLFdBQVc7RUFDWCxZQUFZLEVBQUE7RUFIZDtJQU1JLFVBQVUsRUFBQSIsImZpbGUiOiJzcmMvYXBwL3BhZ2UvbGlzdC1kZXRhaWwvbGlzdC1kZXRhaWwuY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIuYm94IHtcclxuICBwYWRkaW5nOiAyMHB4IDV2dztcclxuICB3aWR0aDogMTAwJTtcclxuICBoZWlnaHQ6IDEwMCU7XHJcblxyXG4gIC5sZWZ0IHtcclxuICAgIGRpc3BsYXk6IGlubGluZS1ibG9jaztcclxuICAgIHdpZHRoOiA0OCU7XHJcbiAgICBoZWlnaHQ6IDEwMCU7XHJcbiAgICB2ZXJ0aWNhbC1hbGlnbjogdG9wO1xyXG4gICAgbWFyZ2luLXJpZ2h0OiA0JTtcclxuICB9XHJcblxyXG4gIC5yaWdodCB7XHJcbiAgICBib3JkZXI6IDFweCBzb2xpZCAjZTNlM2UzO1xyXG4gICAgcGFkZGluZzogMTBweDtcclxuICAgIGRpc3BsYXk6IGlubGluZS1ibG9jaztcclxuICAgIHdpZHRoOiA0OCU7XHJcbiAgICBoZWlnaHQ6IDEwMCU7XHJcbiAgICB2ZXJ0aWNhbC1hbGlnbjogdG9wO1xyXG4gIH1cclxufVxyXG5cclxuLnNtYWxsQm94IHtcclxuICBwYWRkaW5nOiAxMHB4IDVweDtcclxuICB3aWR0aDogMTAwJTtcclxuICBoZWlnaHQ6IDEwMCU7XHJcblxyXG4gIC5yYW5rIHtcclxuICAgIHdpZHRoOiA5NSU7XHJcbiAgfVxyXG59Il19 */"
 
 /***/ }),
 
@@ -748,15 +781,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListDetailComponent", function() { return ListDetailComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _server_basic_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../server/basic.service */ "./src/app/server/basic.service.ts");
+
 
 
 var ListDetailComponent = /** @class */ (function () {
-    function ListDetailComponent() {
+    function ListDetailComponent(basicService) {
+        this.basicService = basicService;
     }
     ListDetailComponent.prototype.ngOnInit = function () {
     };
     ListDetailComponent.prototype.getSelectedId = function ($event) {
         this.selectedId = $event;
+    };
+    ListDetailComponent.prototype.ngDoCheck = function () {
+        this.windowSize = this.basicService.browser.getValue();
     };
     ListDetailComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -764,7 +803,7 @@ var ListDetailComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./list-detail.component.html */ "./src/app/page/list-detail/list-detail.component.html"),
             styles: [__webpack_require__(/*! ./list-detail.component.scss */ "./src/app/page/list-detail/list-detail.component.scss")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_server_basic_service__WEBPACK_IMPORTED_MODULE_2__["BasicService"]])
     ], ListDetailComponent);
     return ListDetailComponent;
 }());
@@ -1040,9 +1079,13 @@ var BasicService = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _resolve_dark___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./resolve/dark/奥 */ "./src/data/resolve/dark/奥.ts");
+/* harmony import */ var _resolve_dark___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./resolve/dark/巡 */ "./src/data/resolve/dark/巡.ts");
 
-var dataList = [_resolve_dark___WEBPACK_IMPORTED_MODULE_0__["default"]];
-/* harmony default export */ __webpack_exports__["default"] = (dataList);
+
+var dataList = [_resolve_dark___WEBPACK_IMPORTED_MODULE_0__["default"], _resolve_dark___WEBPACK_IMPORTED_MODULE_1__["default"]];
+/* harmony default export */ __webpack_exports__["default"] = (dataList.sort(function (a, b) {
+    return a.id - b.id;
+}));
 
 
 /***/ }),
@@ -1090,16 +1133,18 @@ var rank1905 = [
         type: 'score',
         score: 10,
         sorts: [],
+        detail: [],
         bgc: ''
     },
     {
         type: 'describe',
-        describe: '',
+        describe: '本网站目前还处于演示阶段，未来内容会丰富起来',
     },
     {
         type: 'score',
         score: 9.5,
-        sorts: [1],
+        sorts: [0, 1],
+        detail: [],
         bgc: ''
     },
 ];
@@ -1119,7 +1164,7 @@ var rank1905 = [
 __webpack_require__.r(__webpack_exports__);
 var theData = {
     name: '奥里西斯',
-    id: 1,
+    id: 0,
     attr: {
         key: 'dark',
         value: '暗'
@@ -1146,6 +1191,56 @@ var theData = {
                 '抛开不常用的队长技不谈，奥里西斯的其他三个技能都有着几个需要注意的地方。必杀由于是aoe所以会配合天赋给所有非牧师敌人挂上一层重伤，配合奥里西斯命运的极速加怒，构成了令人闻风丧胆的奥速攻体系；天赋可叠加二层重伤（75％减疗，20％易伤），并且减疗效果是针对所有回血生效的——与死神这种光扣回复值却碰不了百分比回复和吸血的卡相比真的是天差地别。也正因为这个天赋，即使是擅长拖十回合的达莉娅队也无法在拥有四个不拖后腿的队友的奥里西斯面前撑得下这狂风暴雨般的攻击。',
                 '而奥里西斯的命运正是补足她强度的最后一环——进入战斗满怒加伤的效果极少出现暂且不提，不满怒则获得100怒气（实际上是等到她行动才加的怒气，因此防守方开场满怒的奥不会被进攻方的月亮控住）的效果实在是太强了。虽然有着拿了怒气就伤害减半一回合的副作用，但是要么开场给敌方全体挂重伤要么等到第一回合副作用过后再以明显快于绝大多数aoe大招的速度甩下一大片伤害，无论哪个都不是正常情况下轻易吃得起的——因此对阵奥里西斯最好的方法就是让她在战斗结束之前开不出大招。',
                 '推荐搭配：在跨服竞技场挂着鱼人队长露露队长都能打出全队最高伤害并且带飞全队取得胜利的卡，我真不知道有什么好写的……谁用谁知道，上就完事了'
+            ]
+        }
+    ]
+};
+/* harmony default export */ __webpack_exports__["default"] = (theData);
+
+
+/***/ }),
+
+/***/ "./src/data/resolve/dark/巡.ts":
+/*!************************************!*\
+  !*** ./src/data/resolve/dark/巡.ts ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var theData = {
+    name: '暗影巡林',
+    id: 1,
+    attr: {
+        key: 'dark',
+        value: '暗'
+    },
+    job: '射手',
+    transfer: ['箭术长', '游侠', '风吟者'],
+    camp: '异族',
+    avatar: '/assets/avatar/dark/巡.png',
+    card: [{
+            type: '20攻击游侠暗影巡林',
+            src: '/assets/card/dark/巡.jpg'
+        }, {
+            type: '20攻击风吟者暗影巡林',
+            src: '/assets/card/dark/巡f.jpg'
+        }],
+    skill: '/assets/skill/dark/巡.jpg',
+    resolves: [
+        {
+            auth: '寒寒',
+            date: '19年6月17号',
+            paragraph: [
+                '大家好，我是能二号位能三号位能五号位甚至位置不够还可以去四号位简单说就是除了一号位其他位置都能站的血族三幻神最弱存在暗影巡林。',
+                '三幻神中，露露缇雅29c不算鱼人战力血族第一面板高到离谱，奥里西斯26c唯二秘牧面板不低实力强劲，那么问题来了，暗影巡林这种22c面板差劲又没专属甚至命运还被砍了一刀的辣鸡卡是怎么成为三幻神之一的呢？',
+                '答案有很多个，说是因为暗属性也没错，说是因为射手职业也靠谱，说是因为命运的buff也没差，但是最重要的原因还是因为她的天赋。',
+                '这个“攻击目标锁定为敌方血量百分比最低角色”的效果，不知道让多少血族玩家又爱又恨。也正是因为这个天赋，巡林衍生出了三种流派的玩法。',
+                '可能有很多人知道，巡林一开始是靠二号位点杀出名的（偶尔三号位），而即使到了现在点杀流巡林也依然没有完全退出历史舞台。黛丝挥锤艾萨尔拉弓，泷尉鸦啄奥镰起舞，吉哈小弑致命狙击，这些都是可以和巡林配合打出亮眼表现的例子。但是随着面板的堆砌，巡林的单人输出能力越来越有限，虽然在佑希等人的辅佐下依然能对后排造成巨大的点杀威胁，但终究是不如以前风光了。',
+                '随着射手队的正式形成，血族也出现了一种新的流派——补刀流巡林。转职游侠风吟皆可，射手队五号位提供命运buff以及补刀残血，但是因为没有在后排吃各种射手buff，实际上也就是个半辅助半输出的打法而已，并且在巡林可以同时玩转三大玩法的情况下不顾其他两种贸然转职风吟，很是吃亏。',
+                '第三种流派是最简单粗暴的流派，实际上也是在刚推出巡林的时候就已经出现了的，只不过因为收益没有点杀流高才渐渐没落，直到某些强力菜刀出现后才重新崛起——说到这可能已经有人猜到了，这种流派正是爆破流。依靠一号位与二号位的超强爆发将敌方人员打残，再由三号位的巡林进行精准打击，这就是这个流派的核心所在。在这里巡林就是一个几乎百分百不散打的输出，绝大多数情况下队友打谁我就打谁，相比起靠黛丝和第一回合不一定能开大的奥来导航的点杀流以及虽然有前几个队友的强劲输出但是自己在五号位并没有多高输出的补刀流来说，巡林的输出更稳定，收割几率也更高，比较常见于暗刀这种打法中，不过射手队三号位巡林也不少见。',
+                '推荐搭配：其实都写在上面了，只能说巡林的用法真的很多而且每种都有各自的特点。很多人只会无脑用射手五号位巡林或巡黛二号位巡林，甚至还有很多人都还不知道站位这东西对血族pvp有多么大的影响。巡林也算是最为代表血族站位学的一张卡了，玩好巡林基本上就证明你学会了站位。'
             ]
         }
     ]
