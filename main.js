@@ -202,6 +202,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _page_support_us_support_us_component__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./page/support-us/support-us.component */ "./src/app/page/support-us/support-us.component.ts");
 /* harmony import */ var _component_ranking_ranking_component__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./component/ranking/ranking.component */ "./src/app/component/ranking/ranking.component.ts");
 /* harmony import */ var _directive_dl_pic_directive__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./directive/dl-pic.directive */ "./src/app/directive/dl-pic.directive.ts");
+/* harmony import */ var _directive_border_directive__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./directive/border.directive */ "./src/app/directive/border.directive.ts");
+
 
 
 
@@ -244,7 +246,8 @@ var AppModule = /** @class */ (function () {
                 _page_about_us_about_us_component__WEBPACK_IMPORTED_MODULE_19__["AboutUsComponent"],
                 _page_support_us_support_us_component__WEBPACK_IMPORTED_MODULE_20__["SupportUsComponent"],
                 _component_ranking_ranking_component__WEBPACK_IMPORTED_MODULE_21__["RankingComponent"],
-                _directive_dl_pic_directive__WEBPACK_IMPORTED_MODULE_22__["DlPicDirective"]
+                _directive_dl_pic_directive__WEBPACK_IMPORTED_MODULE_22__["DlPicDirective"],
+                _directive_border_directive__WEBPACK_IMPORTED_MODULE_23__["BorderDirective"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
@@ -384,7 +387,7 @@ var HeaderComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"box\">\n  <h4>\n    {{rank.title}}\n<!--    <button nz-button appDlPic nzType=\"primary\" nzSize=\"small\" [name]=\"rank.title\" [path]=\"rank.download\">下载本月节奏榜</button>-->\n  </h4>\n  <div class=\"ranking\">\n    <div class=\"score\">\n      <div class=\"line\" *ngFor=\"let item of rank.rank\">\n        <div class=\"item\">\n          {{item.score}}\n        </div>\n      </div>\n    </div>\n    <div class=\"avatarList\">\n      <div class=\"line\" *ngFor=\"let item of rank.rank\">\n        <div *ngIf=\"item.type === 'score'\">\n          <div class=\"item dark\" *ngFor=\"let card of item.detail\" nz-popover [nzContent]=\"card.name\" (click)=\"selectItem(card.id)\">\n            <img class=\"avatar\" [src]=\"card.avatar\" [alt]=\"card.name\">\n          </div>\n        </div>\n        <div *ngIf=\"item.type === 'describe'\">\n          {{item.describe}}\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<nz-modal nzTitle=\"卡牌详情\"\n          [(nzVisible)]=\"openModal\"\n          [nzFooter]=\"null\" [nzStyle]=\"{ top: '40px' }\"\n          [nzBodyStyle]=\"{height: '80vh',overflow: 'scroll'}\"\n          (nzOnCancel)=\"closeModalFunc()\">\n  <app-resolve class=\"right\" [selectedId]='selectedId'></app-resolve>\n</nz-modal>"
+module.exports = "<div class=\"box\">\n  <h4>\n    {{rank.title}}\n<!--    <button nz-button appDlPic nzType=\"primary\" nzSize=\"small\" [name]=\"rank.title\" [path]=\"rank.download\">下载本月节奏榜</button>-->\n  </h4>\n  <div class=\"ranking\">\n    <div class=\"score\">\n      <div class=\"line\" *ngFor=\"let item of rank.rank\">\n        <div class=\"item\">\n          {{item.score}}\n        </div>\n      </div>\n    </div>\n    <div class=\"avatarList\">\n      <div class=\"avatarListBox\" [ngStyle]=\"{width: maxWidth * 80 + 'px'}\">\n        <div class=\"line\" *ngFor=\"let item of rank.rank\">\n          <div *ngIf=\"item.type === 'score'\">\n            <div class=\"item\" *ngFor=\"let card of item.detail\" [appBorder]=\"card.attr.key\" nz-popover [nzContent]=\"card.name\" (click)=\"selectItem(card.id)\">\n              <img class=\"avatar\" [src]=\"card.avatar\" [alt]=\"card.name\">\n            </div>\n          </div>\n          <div *ngIf=\"item.type === 'describe'\">\n            {{item.describe}}\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<nz-modal nzTitle=\"卡牌详情\"\n          [(nzVisible)]=\"openModal\"\n          [nzFooter]=\"null\" [nzStyle]=\"{ top: '40px' }\"\n          [nzBodyStyle]=\"{height: '80vh',overflow: 'scroll'}\"\n          (nzOnCancel)=\"closeModalFunc()\">\n  <app-resolve class=\"right\" [selectedId]='selectedId'></app-resolve>\n</nz-modal>"
 
 /***/ }),
 
@@ -395,7 +398,7 @@ module.exports = "<div class=\"box\">\n  <h4>\n    {{rank.title}}\n<!--    <butt
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".box {\n  width: 100%;\n  height: 100%;\n  overflow: scroll;\n  border: 1px solid #e3e3e3; }\n  .box::-webkit-scrollbar {\n    display: none; }\n  .box h4 {\n    height: 40px;\n    border-bottom: 1px solid #e3e3e3;\n    font-size: 18px;\n    text-align: center;\n    line-height: 40px; }\n  .box h4 button {\n      float: right;\n      margin: 8px 6px 0 0; }\n  .box .ranking {\n    width: 100%;\n    height: calc(100% - 40px); }\n  .box .ranking .score {\n      display: inline-block;\n      width: 80px;\n      height: 100%;\n      vertical-align: top;\n      border-right: 1px solid #e3e3e3; }\n  .box .ranking .score .line {\n        width: 100%;\n        height: 80px;\n        border-bottom: 1px solid #e3e3e3;\n        text-align: center;\n        font-size: 24px;\n        line-height: 80px; }\n  .box .ranking .avatarList {\n      width: calc(100% - 80px);\n      height: 100%;\n      display: inline-block;\n      vertical-align: top;\n      overflow-y: hidden;\n      overflow-x: scroll; }\n  .box .ranking .avatarList::-webkit-scrollbar {\n        display: none; }\n  .box .ranking .avatarList .line {\n        width: 100%;\n        height: 80px;\n        border-bottom: 1px solid #e3e3e3; }\n  .box .ranking .avatarList .line .item {\n          width: 80px;\n          height: 80px;\n          cursor: pointer;\n          display: inline-block; }\n  .box .ranking .avatarList .line .item img {\n            z-index: -1;\n            position: relative;\n            width: 60%;\n            top: 16px;\n            left: 16px; }\n  .box .ranking .avatarList .line .dark {\n          background: url('border.png') 6px -510px no-repeat;\n          background-size: 95% auto; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY29tcG9uZW50L3JhbmtpbmcvRzpcXGNvZGVcXGJsSGVscGVyL3NyY1xcYXBwXFxjb21wb25lbnRcXHJhbmtpbmdcXHJhbmtpbmcuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSxXQUFXO0VBQ1gsWUFBWTtFQUNaLGdCQUFnQjtFQUNoQix5QkFBeUIsRUFBQTtFQUozQjtJQU1JLGFBQWEsRUFBQTtFQU5qQjtJQVNJLFlBQVk7SUFDWixnQ0FBZ0M7SUFDaEMsZUFBZTtJQUNmLGtCQUFrQjtJQUNsQixpQkFBaUIsRUFBQTtFQWJyQjtNQWVNLFlBQVk7TUFDWixtQkFBbUIsRUFBQTtFQWhCekI7SUFvQkksV0FBVztJQUNYLHlCQUF5QixFQUFBO0VBckI3QjtNQXVCTSxxQkFBcUI7TUFDckIsV0FBVztNQUNYLFlBQVk7TUFDWixtQkFBbUI7TUFDbkIsK0JBQStCLEVBQUE7RUEzQnJDO1FBNkJRLFdBQVc7UUFDWCxZQUFZO1FBQ1osZ0NBQWdDO1FBQ2hDLGtCQUFrQjtRQUNsQixlQUFlO1FBQ2YsaUJBQWlCLEVBQUE7RUFsQ3pCO01Bc0NNLHdCQUF3QjtNQUN4QixZQUFZO01BQ1oscUJBQXFCO01BQ3JCLG1CQUFtQjtNQUNuQixrQkFBa0I7TUFDbEIsa0JBQWtCLEVBQUE7RUEzQ3hCO1FBNkNRLGFBQWEsRUFBQTtFQTdDckI7UUFnRFEsV0FBVztRQUNYLFlBQVk7UUFDWixnQ0FBZ0MsRUFBQTtFQWxEeEM7VUFvRFUsV0FBVztVQUNYLFlBQVk7VUFDWixlQUFlO1VBQ2YscUJBQXFCLEVBQUE7RUF2RC9CO1lBeURZLFdBQVc7WUFDWCxrQkFBa0I7WUFDbEIsVUFBVTtZQUNWLFNBQVM7WUFDVCxVQUFVLEVBQUE7RUE3RHRCO1VBa0VVLGtEQUF5RTtVQUN6RSx5QkFBeUIsRUFBQSIsImZpbGUiOiJzcmMvYXBwL2NvbXBvbmVudC9yYW5raW5nL3JhbmtpbmcuY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIuYm94e1xyXG4gIHdpZHRoOiAxMDAlO1xyXG4gIGhlaWdodDogMTAwJTtcclxuICBvdmVyZmxvdzogc2Nyb2xsO1xyXG4gIGJvcmRlcjogMXB4IHNvbGlkICNlM2UzZTM7XHJcbiAgJjo6LXdlYmtpdC1zY3JvbGxiYXIge1xyXG4gICAgZGlzcGxheTogbm9uZTtcclxuICB9XHJcbiAgaDR7XHJcbiAgICBoZWlnaHQ6IDQwcHg7XHJcbiAgICBib3JkZXItYm90dG9tOiAxcHggc29saWQgI2UzZTNlMztcclxuICAgIGZvbnQtc2l6ZTogMThweDtcclxuICAgIHRleHQtYWxpZ246IGNlbnRlcjtcclxuICAgIGxpbmUtaGVpZ2h0OiA0MHB4O1xyXG4gICAgYnV0dG9ue1xyXG4gICAgICBmbG9hdDogcmlnaHQ7XHJcbiAgICAgIG1hcmdpbjogOHB4IDZweCAwIDA7XHJcbiAgICB9XHJcbiAgfVxyXG4gIC5yYW5raW5ne1xyXG4gICAgd2lkdGg6IDEwMCU7XHJcbiAgICBoZWlnaHQ6IGNhbGMoMTAwJSAtIDQwcHgpO1xyXG4gICAgLnNjb3Jle1xyXG4gICAgICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7XHJcbiAgICAgIHdpZHRoOiA4MHB4O1xyXG4gICAgICBoZWlnaHQ6IDEwMCU7XHJcbiAgICAgIHZlcnRpY2FsLWFsaWduOiB0b3A7XHJcbiAgICAgIGJvcmRlci1yaWdodDogMXB4IHNvbGlkICNlM2UzZTM7XHJcbiAgICAgIC5saW5le1xyXG4gICAgICAgIHdpZHRoOiAxMDAlO1xyXG4gICAgICAgIGhlaWdodDogODBweDtcclxuICAgICAgICBib3JkZXItYm90dG9tOiAxcHggc29saWQgI2UzZTNlMztcclxuICAgICAgICB0ZXh0LWFsaWduOiBjZW50ZXI7XHJcbiAgICAgICAgZm9udC1zaXplOiAyNHB4O1xyXG4gICAgICAgIGxpbmUtaGVpZ2h0OiA4MHB4O1xyXG4gICAgICB9XHJcbiAgICB9XHJcbiAgICAuYXZhdGFyTGlzdHtcclxuICAgICAgd2lkdGg6IGNhbGMoMTAwJSAtIDgwcHgpO1xyXG4gICAgICBoZWlnaHQ6IDEwMCU7XHJcbiAgICAgIGRpc3BsYXk6IGlubGluZS1ibG9jaztcclxuICAgICAgdmVydGljYWwtYWxpZ246IHRvcDtcclxuICAgICAgb3ZlcmZsb3cteTogaGlkZGVuO1xyXG4gICAgICBvdmVyZmxvdy14OiBzY3JvbGw7XHJcbiAgICAgICY6Oi13ZWJraXQtc2Nyb2xsYmFyIHtcclxuICAgICAgICBkaXNwbGF5OiBub25lO1xyXG4gICAgICB9XHJcbiAgICAgIC5saW5le1xyXG4gICAgICAgIHdpZHRoOiAxMDAlO1xyXG4gICAgICAgIGhlaWdodDogODBweDtcclxuICAgICAgICBib3JkZXItYm90dG9tOiAxcHggc29saWQgI2UzZTNlMztcclxuICAgICAgICAuaXRlbXtcclxuICAgICAgICAgIHdpZHRoOiA4MHB4O1xyXG4gICAgICAgICAgaGVpZ2h0OiA4MHB4O1xyXG4gICAgICAgICAgY3Vyc29yOiBwb2ludGVyO1xyXG4gICAgICAgICAgZGlzcGxheTogaW5saW5lLWJsb2NrO1xyXG4gICAgICAgICAgaW1ne1xyXG4gICAgICAgICAgICB6LWluZGV4OiAtMTtcclxuICAgICAgICAgICAgcG9zaXRpb246IHJlbGF0aXZlO1xyXG4gICAgICAgICAgICB3aWR0aDogNjAlO1xyXG4gICAgICAgICAgICB0b3A6IDE2cHg7XHJcbiAgICAgICAgICAgIGxlZnQ6IDE2cHg7XHJcbiAgICAgICAgICB9XHJcbiAgICAgICAgfVxyXG4gICAgICAgIC5kYXJre1xyXG4gICAgICAgICAgLy8g5pqX5bGe5oCn55qE5L2N572uXHJcbiAgICAgICAgICBiYWNrZ3JvdW5kOiB1cmwoXCIuLi8uLi8uLi9hc3NldHMvYm9yZGVyL2JvcmRlci5wbmdcIikgNnB4IC01MTBweCBuby1yZXBlYXQ7XHJcbiAgICAgICAgICBiYWNrZ3JvdW5kLXNpemU6IDk1JSBhdXRvO1xyXG4gICAgICAgIH1cclxuICAgICAgfVxyXG4gICAgfVxyXG4gIH1cclxufSJdfQ== */"
+module.exports = ".box {\n  width: 100%;\n  height: 100%;\n  overflow: scroll;\n  border: 1px solid #e3e3e3; }\n  .box::-webkit-scrollbar {\n    display: none; }\n  .box h4 {\n    height: 40px;\n    border-bottom: 1px solid #e3e3e3;\n    font-size: 18px;\n    text-align: center;\n    line-height: 40px; }\n  .box h4 button {\n      float: right;\n      margin: 8px 6px 0 0; }\n  .box .ranking {\n    width: 100%;\n    height: calc(100% - 40px); }\n  .box .ranking .score {\n      display: inline-block;\n      width: 80px;\n      height: 100%;\n      vertical-align: top;\n      border-right: 1px solid #e3e3e3; }\n  .box .ranking .score .line {\n        width: 100%;\n        height: 80px;\n        border-bottom: 1px solid #e3e3e3;\n        text-align: center;\n        font-size: 24px;\n        line-height: 80px; }\n  .box .ranking .avatarList {\n      width: calc(100% - 80px);\n      height: 100%;\n      display: inline-block;\n      vertical-align: top;\n      overflow-y: hidden;\n      overflow-x: scroll; }\n  .box .ranking .avatarList .avatarListBox {\n        height: 100%;\n        min-width: 100%; }\n  .box .ranking .avatarList .avatarListBox .line {\n          width: 100%;\n          height: 80px;\n          border-bottom: 1px solid #e3e3e3; }\n  .box .ranking .avatarList .avatarListBox .line .item {\n            width: 80px;\n            height: 80px;\n            cursor: pointer;\n            display: inline-block; }\n  .box .ranking .avatarList .avatarListBox .line .item img {\n              z-index: -1;\n              position: relative;\n              width: 60%;\n              top: 16px;\n              left: 16px; }\n  .box .ranking .avatarList .avatarListBox .line .dark {\n            background: url('border.png') 6px -510px no-repeat;\n            background-size: 95% auto; }\n  .box .ranking .avatarList .avatarListBox .line .light {\n            background: url('border.png') 6px -688px no-repeat;\n            background-size: 95% auto; }\n  .box .ranking .avatarList .avatarListBox .line .thunder {\n            background: url('border.png') 6px -882px no-repeat;\n            background-size: 95% auto; }\n  .box .ranking .avatarList .avatarListBox .line .tree {\n            background: url('border.png') 6px -782px no-repeat;\n            background-size: 95% auto; }\n  .box .ranking .avatarList .avatarListBox .line .fire {\n            background: url('border.png') 6px -594px no-repeat;\n            background-size: 95% auto; }\n  .box .ranking .avatarList .avatarListBox .line .water {\n            background: url('border.png') 6px -418px no-repeat;\n            background-size: 95% auto; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY29tcG9uZW50L3JhbmtpbmcvRzpcXGNvZGVcXGJsSGVscGVyL3NyY1xcYXBwXFxjb21wb25lbnRcXHJhbmtpbmdcXHJhbmtpbmcuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSxXQUFXO0VBQ1gsWUFBWTtFQUNaLGdCQUFnQjtFQUNoQix5QkFBeUIsRUFBQTtFQUozQjtJQU1JLGFBQWEsRUFBQTtFQU5qQjtJQVNJLFlBQVk7SUFDWixnQ0FBZ0M7SUFDaEMsZUFBZTtJQUNmLGtCQUFrQjtJQUNsQixpQkFBaUIsRUFBQTtFQWJyQjtNQWVNLFlBQVk7TUFDWixtQkFBbUIsRUFBQTtFQWhCekI7SUFvQkksV0FBVztJQUNYLHlCQUF5QixFQUFBO0VBckI3QjtNQXVCTSxxQkFBcUI7TUFDckIsV0FBVztNQUNYLFlBQVk7TUFDWixtQkFBbUI7TUFDbkIsK0JBQStCLEVBQUE7RUEzQnJDO1FBNkJRLFdBQVc7UUFDWCxZQUFZO1FBQ1osZ0NBQWdDO1FBQ2hDLGtCQUFrQjtRQUNsQixlQUFlO1FBQ2YsaUJBQWlCLEVBQUE7RUFsQ3pCO01Bc0NNLHdCQUF3QjtNQUN4QixZQUFZO01BQ1oscUJBQXFCO01BQ3JCLG1CQUFtQjtNQUNuQixrQkFBa0I7TUFDbEIsa0JBQWtCLEVBQUE7RUEzQ3hCO1FBZ0RRLFlBQVk7UUFDWixlQUFlLEVBQUE7RUFqRHZCO1VBbURVLFdBQVc7VUFDWCxZQUFZO1VBQ1osZ0NBQWdDLEVBQUE7RUFyRDFDO1lBdURZLFdBQVc7WUFDWCxZQUFZO1lBQ1osZUFBZTtZQUNmLHFCQUFxQixFQUFBO0VBMURqQztjQTREYyxXQUFXO2NBQ1gsa0JBQWtCO2NBQ2xCLFVBQVU7Y0FDVixTQUFTO2NBQ1QsVUFBVSxFQUFBO0VBaEV4QjtZQXFFWSxrREFBeUU7WUFDekUseUJBQXlCLEVBQUE7RUF0RXJDO1lBMEVZLGtEQUF5RTtZQUN6RSx5QkFBeUIsRUFBQTtFQTNFckM7WUErRVksa0RBQXlFO1lBQ3pFLHlCQUF5QixFQUFBO0VBaEZyQztZQW9GWSxrREFBeUU7WUFDekUseUJBQXlCLEVBQUE7RUFyRnJDO1lBeUZZLGtEQUF5RTtZQUN6RSx5QkFBeUIsRUFBQTtFQTFGckM7WUE4Rlksa0RBQXlFO1lBQ3pFLHlCQUF5QixFQUFBIiwiZmlsZSI6InNyYy9hcHAvY29tcG9uZW50L3JhbmtpbmcvcmFua2luZy5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi5ib3h7XHJcbiAgd2lkdGg6IDEwMCU7XHJcbiAgaGVpZ2h0OiAxMDAlO1xyXG4gIG92ZXJmbG93OiBzY3JvbGw7XHJcbiAgYm9yZGVyOiAxcHggc29saWQgI2UzZTNlMztcclxuICAmOjotd2Via2l0LXNjcm9sbGJhciB7XHJcbiAgICBkaXNwbGF5OiBub25lO1xyXG4gIH1cclxuICBoNHtcclxuICAgIGhlaWdodDogNDBweDtcclxuICAgIGJvcmRlci1ib3R0b206IDFweCBzb2xpZCAjZTNlM2UzO1xyXG4gICAgZm9udC1zaXplOiAxOHB4O1xyXG4gICAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG4gICAgbGluZS1oZWlnaHQ6IDQwcHg7XHJcbiAgICBidXR0b257XHJcbiAgICAgIGZsb2F0OiByaWdodDtcclxuICAgICAgbWFyZ2luOiA4cHggNnB4IDAgMDtcclxuICAgIH1cclxuICB9XHJcbiAgLnJhbmtpbmd7XHJcbiAgICB3aWR0aDogMTAwJTtcclxuICAgIGhlaWdodDogY2FsYygxMDAlIC0gNDBweCk7XHJcbiAgICAuc2NvcmV7XHJcbiAgICAgIGRpc3BsYXk6IGlubGluZS1ibG9jaztcclxuICAgICAgd2lkdGg6IDgwcHg7XHJcbiAgICAgIGhlaWdodDogMTAwJTtcclxuICAgICAgdmVydGljYWwtYWxpZ246IHRvcDtcclxuICAgICAgYm9yZGVyLXJpZ2h0OiAxcHggc29saWQgI2UzZTNlMztcclxuICAgICAgLmxpbmV7XHJcbiAgICAgICAgd2lkdGg6IDEwMCU7XHJcbiAgICAgICAgaGVpZ2h0OiA4MHB4O1xyXG4gICAgICAgIGJvcmRlci1ib3R0b206IDFweCBzb2xpZCAjZTNlM2UzO1xyXG4gICAgICAgIHRleHQtYWxpZ246IGNlbnRlcjtcclxuICAgICAgICBmb250LXNpemU6IDI0cHg7XHJcbiAgICAgICAgbGluZS1oZWlnaHQ6IDgwcHg7XHJcbiAgICAgIH1cclxuICAgIH1cclxuICAgIC5hdmF0YXJMaXN0e1xyXG4gICAgICB3aWR0aDogY2FsYygxMDAlIC0gODBweCk7XHJcbiAgICAgIGhlaWdodDogMTAwJTtcclxuICAgICAgZGlzcGxheTogaW5saW5lLWJsb2NrO1xyXG4gICAgICB2ZXJ0aWNhbC1hbGlnbjogdG9wO1xyXG4gICAgICBvdmVyZmxvdy15OiBoaWRkZW47XHJcbiAgICAgIG92ZXJmbG93LXg6IHNjcm9sbDtcclxuICAgICAgLy8mOjotd2Via2l0LXNjcm9sbGJhciB7XHJcbiAgICAgIC8vICBkaXNwbGF5OiBub25lO1xyXG4gICAgICAvL31cclxuICAgICAgLmF2YXRhckxpc3RCb3h7XHJcbiAgICAgICAgaGVpZ2h0OiAxMDAlO1xyXG4gICAgICAgIG1pbi13aWR0aDogMTAwJTtcclxuICAgICAgICAubGluZXtcclxuICAgICAgICAgIHdpZHRoOiAxMDAlO1xyXG4gICAgICAgICAgaGVpZ2h0OiA4MHB4O1xyXG4gICAgICAgICAgYm9yZGVyLWJvdHRvbTogMXB4IHNvbGlkICNlM2UzZTM7XHJcbiAgICAgICAgICAuaXRlbXtcclxuICAgICAgICAgICAgd2lkdGg6IDgwcHg7XHJcbiAgICAgICAgICAgIGhlaWdodDogODBweDtcclxuICAgICAgICAgICAgY3Vyc29yOiBwb2ludGVyO1xyXG4gICAgICAgICAgICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7XHJcbiAgICAgICAgICAgIGltZ3tcclxuICAgICAgICAgICAgICB6LWluZGV4OiAtMTtcclxuICAgICAgICAgICAgICBwb3NpdGlvbjogcmVsYXRpdmU7XHJcbiAgICAgICAgICAgICAgd2lkdGg6IDYwJTtcclxuICAgICAgICAgICAgICB0b3A6IDE2cHg7XHJcbiAgICAgICAgICAgICAgbGVmdDogMTZweDtcclxuICAgICAgICAgICAgfVxyXG4gICAgICAgICAgfVxyXG4gICAgICAgICAgLmRhcmt7XHJcbiAgICAgICAgICAgIC8vIOaal+WxnuaAp+eahOS9jee9rlxyXG4gICAgICAgICAgICBiYWNrZ3JvdW5kOiB1cmwoXCIuLi8uLi8uLi9hc3NldHMvYm9yZGVyL2JvcmRlci5wbmdcIikgNnB4IC01MTBweCBuby1yZXBlYXQ7XHJcbiAgICAgICAgICAgIGJhY2tncm91bmQtc2l6ZTogOTUlIGF1dG87XHJcbiAgICAgICAgICB9XHJcbiAgICAgICAgICAubGlnaHR7XHJcbiAgICAgICAgICAgIC8vIOWFieWxnuaAp+eahOS9jee9rlxyXG4gICAgICAgICAgICBiYWNrZ3JvdW5kOiB1cmwoXCIuLi8uLi8uLi9hc3NldHMvYm9yZGVyL2JvcmRlci5wbmdcIikgNnB4IC02ODhweCBuby1yZXBlYXQ7XHJcbiAgICAgICAgICAgIGJhY2tncm91bmQtc2l6ZTogOTUlIGF1dG87XHJcbiAgICAgICAgICB9XHJcbiAgICAgICAgICAudGh1bmRlcntcclxuICAgICAgICAgICAgLy8g6Zu35bGe5oCn55qE5L2N572uXHJcbiAgICAgICAgICAgIGJhY2tncm91bmQ6IHVybChcIi4uLy4uLy4uL2Fzc2V0cy9ib3JkZXIvYm9yZGVyLnBuZ1wiKSA2cHggLTg4MnB4IG5vLXJlcGVhdDtcclxuICAgICAgICAgICAgYmFja2dyb3VuZC1zaXplOiA5NSUgYXV0bztcclxuICAgICAgICAgIH1cclxuICAgICAgICAgIC50cmVle1xyXG4gICAgICAgICAgICAvLyDmnKjlsZ7mgKfnmoTkvY3nva5cclxuICAgICAgICAgICAgYmFja2dyb3VuZDogdXJsKFwiLi4vLi4vLi4vYXNzZXRzL2JvcmRlci9ib3JkZXIucG5nXCIpIDZweCAtNzgycHggbm8tcmVwZWF0O1xyXG4gICAgICAgICAgICBiYWNrZ3JvdW5kLXNpemU6IDk1JSBhdXRvO1xyXG4gICAgICAgICAgfVxyXG4gICAgICAgICAgLmZpcmV7XHJcbiAgICAgICAgICAgIC8vIOeBq+WxnuaAp+eahOS9jee9rlxyXG4gICAgICAgICAgICBiYWNrZ3JvdW5kOiB1cmwoXCIuLi8uLi8uLi9hc3NldHMvYm9yZGVyL2JvcmRlci5wbmdcIikgNnB4IC01OTRweCBuby1yZXBlYXQ7XHJcbiAgICAgICAgICAgIGJhY2tncm91bmQtc2l6ZTogOTUlIGF1dG87XHJcbiAgICAgICAgICB9XHJcbiAgICAgICAgICAud2F0ZXJ7XHJcbiAgICAgICAgICAgIC8vIOawtOWxnuaAp+eahOS9jee9rlxyXG4gICAgICAgICAgICBiYWNrZ3JvdW5kOiB1cmwoXCIuLi8uLi8uLi9hc3NldHMvYm9yZGVyL2JvcmRlci5wbmdcIikgNnB4IC00MThweCBuby1yZXBlYXQ7XHJcbiAgICAgICAgICAgIGJhY2tncm91bmQtc2l6ZTogOTUlIGF1dG87XHJcbiAgICAgICAgICB9XHJcbiAgICAgICAgfVxyXG4gICAgICB9XHJcbiAgICB9XHJcbiAgfVxyXG59Il19 */"
 
 /***/ }),
 
@@ -425,9 +428,10 @@ var RankingComponent = /** @class */ (function () {
     function RankingComponent(route, basicService) {
         this.route = route;
         this.basicService = basicService;
-        this.rankList = _data_rankList_rank__WEBPACK_IMPORTED_MODULE_2__["default"];
-        this.dataList = _data_data__WEBPACK_IMPORTED_MODULE_3__["default"];
-        this.openModal = false;
+        this.rankList = _data_rankList_rank__WEBPACK_IMPORTED_MODULE_2__["default"]; // 节奏榜总表
+        this.dataList = _data_data__WEBPACK_IMPORTED_MODULE_3__["default"]; // 数据总表
+        this.openModal = false; // 弹窗开关
+        this.maxWidth = 0; // 本月节奏榜最长的行的头像的个数
         this.emitId = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
     }
     RankingComponent.prototype.ngOnInit = function () {
@@ -439,6 +443,9 @@ var RankingComponent = /** @class */ (function () {
                 value.sorts.forEach(function (v) {
                     value.detail.push(_this.dataList[v]);
                 });
+                if (value.sorts.length > _this.maxWidth) {
+                    _this.maxWidth = value.sorts.length;
+                }
             }
         }));
     };
@@ -543,6 +550,92 @@ var ResolveComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/directive/border.directive.ts":
+/*!***********************************************!*\
+  !*** ./src/app/directive/border.directive.ts ***!
+  \***********************************************/
+/*! exports provided: BorderDirective */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BorderDirective", function() { return BorderDirective; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+
+
+var BorderDirective = /** @class */ (function () {
+    function BorderDirective() {
+        this.dark = false;
+        this.light = false;
+        this.thunder = false;
+        this.tree = false;
+        this.fire = false;
+        this.water = false;
+    }
+    BorderDirective.prototype.ngOnInit = function () {
+        switch (true) {
+            case this.attr === 'dark':
+                this.dark = true;
+                break;
+            case this.attr === 'light':
+                this.light = true;
+                break;
+            case this.attr === 'thunder':
+                this.thunder = true;
+                break;
+            case this.attr === 'tree':
+                this.tree = true;
+                break;
+            case this.attr === 'fire':
+                this.fire = true;
+                break;
+            case this.attr === 'water':
+                this.water = true;
+                break;
+        }
+    };
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])('appBorder'),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
+    ], BorderDirective.prototype, "attr", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["HostBinding"])('class.dark'),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Boolean)
+    ], BorderDirective.prototype, "dark", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["HostBinding"])('class.light'),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Boolean)
+    ], BorderDirective.prototype, "light", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["HostBinding"])('class.thunder'),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Boolean)
+    ], BorderDirective.prototype, "thunder", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["HostBinding"])('class.tree'),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Boolean)
+    ], BorderDirective.prototype, "tree", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["HostBinding"])('class.fire'),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Boolean)
+    ], BorderDirective.prototype, "fire", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["HostBinding"])('class.water'),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Boolean)
+    ], BorderDirective.prototype, "water", void 0);
+    BorderDirective = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Directive"])({
+            selector: '[appBorder]'
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], BorderDirective);
+    return BorderDirective;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/directive/dl-pic.directive.ts":
 /*!***********************************************!*\
   !*** ./src/app/directive/dl-pic.directive.ts ***!
@@ -625,7 +718,7 @@ var DlPicDirective = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div style=\"padding:30px;\">\n  <div nz-row [nzGutter]=\"8\">\n    <div nz-col [nzSpan]=\"8\">\n      <nz-card nzTitle=\"圆桌节奏团简介\">\n        <p>©圆桌节奏团成立于2018年6月8日。节奏团主要负责每月血族的卡牌强度排行榜（节奏榜）,和新卡测评，卡牌数据整理等攻略内容</p>\n        <p>团长：过过（本数据资料站站长）</p>\n        <p>团员：寒寒，菊花，氪狗，龙二，流萤，北斗，松风，小雨，二痕（排名不分先后）</p>\n      </nz-card>\n    </div>\n    <div nz-col [nzSpan]=\"8\">\n      <nz-card nzTitle=\"联系我们\">\n        <p>反馈bug或者联系我们请使用以下联系方式</p>\n        <p><a routerLink=\"/supportUs\">赞助我们</a> 大家的支持就是我们最大的动力</p>\n        <p>QQ：335631892（过过的qq）</p>\n        <p>QQ群：627969179（寒寒的血族交流群）</p>\n        <p>Email：s335631892@icloud.com</p>\n      </nz-card>\n    </div>\n    <div nz-col [nzSpan]=\"8\">\n      <nz-card nzTitle=\"版权声明\">\n        <p>游戏内所有卡面，截图信息版权归<a href=\"http://blood.sdo.com/web3/home/index.html\" target=\"_blank\">血族手游官方</a>和贡献截图的玩家所有</p>\n        <p>站内数据资料，攻略等内容版权归圆桌节奏团所有</p>\n        <p>请勿二次加工本站数据和攻略用于商业用途</p>\n      </nz-card>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div class=\"body\">\n  <div nz-row [nzGutter]=\"8\">\n    <div nz-col [nzSpan]=\"windowSize ? 8 : 24\" class=\"card\">\n      <nz-card nzTitle=\"圆桌节奏团简介\">\n        <p>©圆桌节奏团成立于2018年6月8日。节奏团主要负责每月血族的卡牌强度排行榜（节奏榜）,和新卡测评，卡牌数据整理等攻略内容</p>\n        <p>团长：过过（本数据资料站站长）</p>\n        <p>团员：寒寒，菊花，氪狗，龙二，流萤，北斗，松风，小雨，二痕（排名不分先后）</p>\n      </nz-card>\n    </div>\n    <div nz-col [nzSpan]=\"windowSize ? 8 : 24\">\n      <nz-card nzTitle=\"联系我们\">\n        <p>反馈bug或者联系我们请使用以下联系方式</p>\n        <p><a routerLink=\"/supportUs\">赞助我们</a> 大家的支持就是我们最大的动力</p>\n        <p>QQ：335631892（过过的qq）</p>\n        <p>QQ群：627969179（寒寒的血族交流群）</p>\n        <p>Email：s335631892@icloud.com</p>\n      </nz-card>\n    </div>\n    <div nz-col [nzSpan]=\"windowSize ? 8 : 24\">\n      <nz-card nzTitle=\"版权声明\">\n        <p>游戏内所有卡面，截图信息版权归<a href=\"http://blood.sdo.com/web3/home/index.html\" target=\"_blank\">血族手游官方</a>和贡献截图的玩家所有</p>\n        <p>站内数据资料，攻略等内容版权归圆桌节奏团所有</p>\n        <p>请勿二次加工本站数据和攻略用于商业用途</p>\n      </nz-card>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -636,7 +729,7 @@ module.exports = "<div style=\"padding:30px;\">\n  <div nz-row [nzGutter]=\"8\">
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3BhZ2UvYWJvdXQtdXMvYWJvdXQtdXMuY29tcG9uZW50LnNjc3MifQ== */"
+module.exports = ".body {\n  padding: 30px;\n  height: calc(100vh - 128px);\n  overflow: scroll; }\n  .body .card {\n    margin-bottom: 10px; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnZS9hYm91dC11cy9HOlxcY29kZVxcYmxIZWxwZXIvc3JjXFxhcHBcXHBhZ2VcXGFib3V0LXVzXFxhYm91dC11cy5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLGFBQVk7RUFDWiwyQkFBMkI7RUFDM0IsZ0JBQWdCLEVBQUE7RUFIbEI7SUFLSSxtQkFBbUIsRUFBQSIsImZpbGUiOiJzcmMvYXBwL3BhZ2UvYWJvdXQtdXMvYWJvdXQtdXMuY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIuYm9keXtcclxuICBwYWRkaW5nOjMwcHg7XHJcbiAgaGVpZ2h0OiBjYWxjKDEwMHZoIC0gMTI4cHgpO1xyXG4gIG92ZXJmbG93OiBzY3JvbGw7XHJcbiAgLmNhcmR7XHJcbiAgICBtYXJnaW4tYm90dG9tOiAxMHB4O1xyXG4gIH1cclxufSJdfQ== */"
 
 /***/ }),
 
@@ -652,12 +745,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AboutUsComponent", function() { return AboutUsComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _server_basic_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../server/basic.service */ "./src/app/server/basic.service.ts");
+
 
 
 var AboutUsComponent = /** @class */ (function () {
-    function AboutUsComponent() {
+    function AboutUsComponent(basicService) {
+        this.basicService = basicService;
     }
     AboutUsComponent.prototype.ngOnInit = function () {
+    };
+    AboutUsComponent.prototype.ngDoCheck = function () {
+        this.windowSize = this.basicService.browser.getValue();
     };
     AboutUsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -665,7 +764,7 @@ var AboutUsComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./about-us.component.html */ "./src/app/page/about-us/about-us.component.html"),
             styles: [__webpack_require__(/*! ./about-us.component.scss */ "./src/app/page/about-us/about-us.component.scss")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_server_basic_service__WEBPACK_IMPORTED_MODULE_2__["BasicService"]])
     ], AboutUsComponent);
     return AboutUsComponent;
 }());
@@ -681,7 +780,7 @@ var AboutUsComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<section class=\"body\">\r\n  <div class=\"card\">\r\n    <div *ngFor=\"let item of card\" [routerLink]=\"[item.route, 0]\" [style.background]=\"item.color\" class=\"item\">{{item.name}}</div>\r\n  </div>\r\n</section>\r\n"
+module.exports = "<section class=\"body\">\r\n  <div class=\"card\">\r\n    <div *ngFor=\"let item of card\" [routerLink]=\"item.id ? [item.route, 0] : item.route\" [style.background]=\"item.color\" class=\"item\">{{item.name}}</div>\r\n  </div>\r\n</section>\r\n"
 
 /***/ }),
 
@@ -716,7 +815,8 @@ var IndexComponent = /** @class */ (function () {
             {
                 name: '最新节奏榜',
                 route: '/listDetail',
-                color: '#DDC589'
+                color: '#DDC589',
+                id: true
             },
             {
                 name: '单卡评测',
@@ -1080,9 +1180,11 @@ var BasicService = /** @class */ (function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _resolve_dark___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./resolve/dark/奥 */ "./src/data/resolve/dark/奥.ts");
 /* harmony import */ var _resolve_dark___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./resolve/dark/巡 */ "./src/data/resolve/dark/巡.ts");
+/* harmony import */ var _resolve_light___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./resolve/light/露 */ "./src/data/resolve/light/露.ts");
 
 
-var dataList = [_resolve_dark___WEBPACK_IMPORTED_MODULE_0__["default"], _resolve_dark___WEBPACK_IMPORTED_MODULE_1__["default"]];
+
+var dataList = [_resolve_dark___WEBPACK_IMPORTED_MODULE_0__["default"], _resolve_dark___WEBPACK_IMPORTED_MODULE_1__["default"], _resolve_light___WEBPACK_IMPORTED_MODULE_2__["default"]];
 /* harmony default export */ __webpack_exports__["default"] = (dataList.sort(function (a, b) {
     return a.id - b.id;
 }));
@@ -1143,7 +1245,7 @@ var rank1905 = [
     {
         type: 'score',
         score: 9.5,
-        sorts: [0, 1],
+        sorts: [1, 0, 2],
         detail: [],
         bgc: ''
     },
@@ -1241,6 +1343,50 @@ var theData = {
                 '随着射手队的正式形成，血族也出现了一种新的流派——补刀流巡林。转职游侠风吟皆可，射手队五号位提供命运buff以及补刀残血，但是因为没有在后排吃各种射手buff，实际上也就是个半辅助半输出的打法而已，并且在巡林可以同时玩转三大玩法的情况下不顾其他两种贸然转职风吟，很是吃亏。',
                 '第三种流派是最简单粗暴的流派，实际上也是在刚推出巡林的时候就已经出现了的，只不过因为收益没有点杀流高才渐渐没落，直到某些强力菜刀出现后才重新崛起——说到这可能已经有人猜到了，这种流派正是爆破流。依靠一号位与二号位的超强爆发将敌方人员打残，再由三号位的巡林进行精准打击，这就是这个流派的核心所在。在这里巡林就是一个几乎百分百不散打的输出，绝大多数情况下队友打谁我就打谁，相比起靠黛丝和第一回合不一定能开大的奥来导航的点杀流以及虽然有前几个队友的强劲输出但是自己在五号位并没有多高输出的补刀流来说，巡林的输出更稳定，收割几率也更高，比较常见于暗刀这种打法中，不过射手队三号位巡林也不少见。',
                 '推荐搭配：其实都写在上面了，只能说巡林的用法真的很多而且每种都有各自的特点。很多人只会无脑用射手五号位巡林或巡黛二号位巡林，甚至还有很多人都还不知道站位这东西对血族pvp有多么大的影响。巡林也算是最为代表血族站位学的一张卡了，玩好巡林基本上就证明你学会了站位。'
+            ]
+        }
+    ]
+};
+/* harmony default export */ __webpack_exports__["default"] = (theData);
+
+
+/***/ }),
+
+/***/ "./src/data/resolve/light/露.ts":
+/*!*************************************!*\
+  !*** ./src/data/resolve/light/露.ts ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var theData = {
+    name: '露露缇雅',
+    id: 2,
+    attr: {
+        key: 'light',
+        value: '光'
+    },
+    job: '法师',
+    transfer: ['巫师', '术士'],
+    camp: '法塔',
+    avatar: '/assets/avatar/light/露露.png',
+    card: [{
+            type: '20攻击巫师露露',
+            src: '/assets/card/light/露露.jpg'
+        }],
+    skill: '/assets/skill/light/露露.jpg',
+    resolves: [
+        {
+            auth: '寒寒',
+            date: '19年6月18号',
+            paragraph: [
+                '大家好，我是能制杖会持盾手持四十米大镰刀……的传奇法师露露缇雅。位列三幻神第二，法师队的万年核心。',
+                '关于露露缇雅这张卡，其实能说的东西也不是特别多。露露缇雅强吗？强。为什么强？一是得益于唯一29c的地位面板巨高无比，二是拥有羡煞旁人的强力双专属，三是因为技能组简单粗暴加怒加伤加爆怒速一应俱全直接起飞，通常情况下是全游白字最高伤害aoe，四则是一个老生常谈的问题——光暗属性输出无死角。',
+                '不过现在也早就过了露露缇雅一个人打一个队伍的时代了，更多的是露露缇雅与其他队员相辅相成、共同创造胜利的局面。其中优质的法师队友有微热巫女，艾斯卡，涅莉等人，而优质的回复牧师队友又有御，伊娜，维兰瑟，辉夜，月亮隐者等角色，这些卡的存在再加上德丽莎永夜莉萝这些出场率极高的坦克，基本上就构成了露露缇雅在血族手游中组建法师队的人员名单。',
+                '应对不同的情况就需要选择不同的队友——输出多了坦克少了面对菜刀容易暴毙，坦克多了输出少了面对苟队容易打不死；怒气多了输出少了面对肉一点的一波容易打不死，输出多了怒气少了面对吃得下你平砍的又容易没开大就死了。我经常看到有人问“法师队怎么组”并且要求给出五张具体的卡，但是我也从来不会真的按他的要求给，因为法师队从来都不是一个一成不变的队伍。',
+                '推荐搭配：推荐人选如上所说，根据实际情况挑选合适的队友。并且由于不同法阵造成的影响也不同，因此法师队最好还是看自己的手感'
             ]
         }
     ]
