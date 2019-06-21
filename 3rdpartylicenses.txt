@@ -129,6 +129,8 @@ ng-zorro-antd/drawer
 
 ng-zorro-antd/dropdown
 
+ng-zorro-antd/empty
+
 ng-zorro-antd/message
 
 ng-zorro-antd/modal
@@ -138,6 +140,8 @@ ng-zorro-antd/notification
 ng-zorro-antd/popconfirm
 
 ng-zorro-antd/popover
+
+ng-zorro-antd/select
 
 ng-zorro-antd/tabs
 
