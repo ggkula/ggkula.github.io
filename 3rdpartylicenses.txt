@@ -125,6 +125,8 @@ ng-zorro-antd/button
 
 ng-zorro-antd/card
 
+ng-zorro-antd/carousel
+
 ng-zorro-antd/drawer
 
 ng-zorro-antd/dropdown
